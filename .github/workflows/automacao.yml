@@ -26,4 +26,4 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          hermes chat --message "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório."
+          hermes chat "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório." --yolo
