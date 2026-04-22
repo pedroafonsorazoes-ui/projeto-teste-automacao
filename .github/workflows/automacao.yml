@@ -33,7 +33,7 @@ jobs:
         run: |
           # 1. Pedimos ao Hermes para escrever o ficheiro usando as ferramentas dele
           # Reparaste que tirámos o "> CHANGELOG.md" do fim?
-          echo "Lê o histórico do git e escreve (ou atualiza) um ficheiro chamado CHANGELOG.md com o resumo das novidades em português. Usa um formato Markdown limpo e profissional. Não mostres o logo no ficheiro." | hermes --yolo chat
+          echo "Lê os commits e cria um CHANGELOG.md. Divide em secções: '🚀 Novas Funcionalidades', '🐛 Correções de Erros' e '⚡ Melhorias'. Escreve num tom profissional em Português de Portugal." | hermes --yolo chat
           
           # 2. Enviamos para o GitHub
           git add CHANGELOG.md
