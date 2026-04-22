@@ -31,10 +31,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # 1. O Hermes gera o texto e nós guardamos diretamente no ficheiro
-          hermes --yolo chat "Gera um resumo dos commits em formato Markdown para um ficheiro CHANGELOG.md. Escreve apenas o conteúdo do changelog." > CHANGELOG.md
+          # 1. Enviamos a mensagem para dentro do Hermes usando o pipe '|'
+          echo "Lê o histórico do git e gera um resumo em formato Markdown para um ficheiro CHANGELOG.md. Escreve apenas o conteúdo do changelog." | hermes --yolo chat > CHANGELOG.md
           
-          # 2. Comandos manuais de Git para garantir que o ficheiro viaja para o GitHub
+          # 2. Forçamos o Git a aceitar o ficheiro e enviamos
           git add CHANGELOG.md
-          git commit -m "docs: changelog atualizado automaticamente [skip ci]"
+          git commit -m "docs: changelog atualizado [skip ci]" || echo "Sem alterações para gravar"
           git push
