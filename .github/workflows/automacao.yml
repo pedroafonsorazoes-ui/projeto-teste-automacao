@@ -20,7 +20,7 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar Hermes
-        run: pip install hermes-agent
+        run: pip install git+https://github.com/NousResearch/Hermes-Agent.git
 
       - name: Gerar Changelog com IA
         env:
