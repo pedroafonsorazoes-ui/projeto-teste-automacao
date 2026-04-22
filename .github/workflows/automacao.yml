@@ -22,8 +22,13 @@ jobs:
       - name: Instalar Hermes
         run: pip install git+https://github.com/NousResearch/Hermes-Agent.git
 
+      - name: Configurar Git (Obrigatório para o Commit)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Gerar Changelog com IA
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          hermes chat "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório." --yolo
+          echo "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório." | hermes --yolo chat
