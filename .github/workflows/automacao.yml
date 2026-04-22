@@ -31,10 +31,14 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # 1. Pedimos ao Hermes para escrever o ficheiro diretamente (repara que não há o símbolo ">")
-          echo "Lê o histórico do git e utiliza a tua ferramenta de escrita de ficheiros para criar um ficheiro chamado CHANGELOG.md com o resumo profissional em português. Escreve APENAS o texto do changelog no ficheiro, sem logos ou introduções." | hermes --yolo chat
+          # 1. Pedimos o texto, mas EXIGIMOS que ele coloque o changelog entre tags específicas
+          echo "Lê o histórico do git e gera um changelog em Markdown. OBRIGATÓRIO: Coloca todo o texto do changelog exatamente entre a tag <INICIO> e a tag <FIM>. Não escrevas texto fora destas tags." | hermes --yolo chat > saida_bruta.txt
           
-          # 2. Verificar se ele criou o ficheiro e enviar
+          # 2. O Cirurgião: Cortamos TUDO o que está fora das tags (adeus logótipo!) e guardamos no ficheiro final
+          sed -n '/<INICIO>/,/<FIM>/p' saida_bruta.txt | grep -v '<INICIO>' | grep -v '<FIM>' > CHANGELOG.md
+          
+          # 3. Limpamos o lixo, guardamos o ficheiro limpo e enviamos
+          rm saida_bruta.txt
           git add CHANGELOG.md
-          git commit -m "docs: changelog limpo via tool nativa [skip ci]" || echo "Sem alterações"
+          git commit -m "docs: changelog cirurgicamente extraído [skip ci]" || echo "Sem mudanças"
           git push origin main
