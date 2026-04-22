@@ -1,0 +1,29 @@
+name: Agente de Changelog
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: 
+
+jobs:
+  trabalhar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copiar Código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar Hermes
+        run: pip install hermes-agent
+
+      - name: Gerar Changelog com IA
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          hermes chat --message "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório."
