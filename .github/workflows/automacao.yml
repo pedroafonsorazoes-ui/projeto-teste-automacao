@@ -27,8 +27,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Gerar Changelog com IA
+      - name: Gerar e Enviar Changelog
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "Lê o histórico do git e cria um ficheiro chamado CHANGELOG.md em português com as novidades. Depois, faz o commit e o push para o repositório." | hermes --yolo chat
+          # 1. O Hermes gera o texto e nós guardamos diretamente no ficheiro
+          hermes --yolo chat "Gera um resumo dos commits em formato Markdown para um ficheiro CHANGELOG.md. Escreve apenas o conteúdo do changelog." > CHANGELOG.md
+          
+          # 2. Comandos manuais de Git para garantir que o ficheiro viaja para o GitHub
+          git add CHANGELOG.md
+          git commit -m "docs: changelog atualizado automaticamente [skip ci]"
+          git push
