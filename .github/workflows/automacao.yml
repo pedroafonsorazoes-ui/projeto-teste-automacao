@@ -31,9 +31,13 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Desta vez usamos o Hermes para ESCREVER o ficheiro, sem o ">"
-          echo "Lê o histórico do git e utiliza a tua ferramenta de escrita de ficheiros para criar um CHANGELOG.md limpo em português. Não incluas logos ou mensagens de sistema no ficheiro, apenas o conteúdo Markdown." | hermes --yolo chat
+          # 1. Gerar o texto limpo e guardar num ficheiro temporário
+          echo "Lê o histórico do git e gera um resumo Markdown profissional em português. Não incluas logos." | hermes --yolo chat > novo_changelog.md
           
+          # 2. Substituir o antigo pelo novo (limpando o lixo)
+          mv novo_changelog.md CHANGELOG.md
+          
+          # 3. Enviar
           git add CHANGELOG.md
-          git commit -m "docs: changelog limpo por IA [skip ci]" || echo "Sem mudanças"
-          git push
+          git commit -m "docs: changelog atualizado pela IA [skip ci]" || echo "Sem mudanças"
+          git push origin main
